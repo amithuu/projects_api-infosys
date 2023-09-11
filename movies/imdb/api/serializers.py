@@ -92,11 +92,11 @@ class MovieSerializer(serializers.ModelSerializer):
 
         if len(value) <= 2:
             raise serializers.ValidationError("The movie name should be more than 5 character")
+        return value
     
     def validate(self, data):
 
         if data['movie_name'] == data['movie_desc']:
             raise serializers.ValidationError(" name and description cannot be same")
         return data
-    
     

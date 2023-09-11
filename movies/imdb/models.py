@@ -9,5 +9,5 @@ class Movie(models.Model):
     movie_status = models.BooleanField(default=True)
 
     def __str__(self):
-        return self. movie_name
+        return self.movie_name
     

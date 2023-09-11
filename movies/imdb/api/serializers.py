@@ -99,3 +99,4 @@ class MovieSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(" name and description cannot be same")
         return data
     
+    

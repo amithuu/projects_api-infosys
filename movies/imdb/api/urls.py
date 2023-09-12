@@ -25,9 +25,9 @@ from imdb.api import views
 # ]
 
 urlpatterns = [
-    path('list/', views.WatchListViewAv.as_view(), name = 'Movie_list'),
-    path('<int:pk>', views.WatchListDetailsViewAv.as_view(), name = 'Movie_Details'),
-    path('ott/', views.StreamPlatformListViewAv.as_view(), name = 'Platform_Stream'),
-    path('ott/<int:pk>', views.StreamPlatformDetailsViewAv.as_view(), name = 'Platform_Details'),
+    path('movielist/', views.WatchListViewAv.as_view(), name = 'Movie_list'),
+    path('movie<int:pk>/', views.WatchListDetailsViewAv.as_view(), name = 'Movie_Details'),
+    path('streamlist/', views.StreamPlatformListViewAv.as_view(), name = 'Platform_Stream'),
+    path('stream<int:pk>/', views.StreamPlatformDetailsViewAv.as_view(), name = 'Platform_Details'),
 ]
 

@@ -206,7 +206,7 @@ class StreamPlatformListViewAv(APIView):
 
     def get(self, request):
         movies = StreamPlatform.objects.all()
-        serializer = StreamPlatformSerializer(movies, many=True)
+        serializer = StreamPlatformSerializer(movies, many=True) # , context = {'request': request}[for hyperlink]
         return Response(serializer.data)
     
     def post(self, request):

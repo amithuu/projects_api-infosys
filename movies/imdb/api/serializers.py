@@ -143,11 +143,6 @@ from imdb.models import WatchList, StreamPlatform
     
 
     #####################################
-class StreamPlatformSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = StreamPlatform
-        fields = "__all__"
 
 class WatchListSerializer(serializers.ModelSerializer):
 
@@ -155,5 +150,18 @@ class WatchListSerializer(serializers.ModelSerializer):
         model = WatchList
         fields = "__all__"
 
-        
 
+class StreamPlatformSerializer(serializers.ModelSerializer):
+
+    watchlist = WatchListSerializer(many=True, read_only=True) # -> take the entire data from the serializer
+    # watchlist = serializers.StringRelatedField(many=True, read_only=True) -> takes only the __str__ function data
+    # watchlist = serializers.PrimaryKeyRelatedField(many=True, read_only=True) -> takes only the primary key field data
+    # watchlist = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name = 'Movie_Details') 
+
+    class Meta:
+        model = StreamPlatform
+        fields = "__all__"
+
+# ? watchlist = WatchListSerializer(many=True, read_only=True)
+
+# ? the above one is to set the relation with the watchlist[one platform can have multiple Movies]

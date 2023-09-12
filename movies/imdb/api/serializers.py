@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from imdb.models import Movie
+from imdb.models import WatchList, StreamPlatform
 
 # [2 types of serializer, one is Serializer, ModelSerializer ]
 
@@ -81,22 +81,79 @@ from imdb.models import Movie
 ###############################################################################################
 # [but now learning ModelSerializer]
 
-class MovieSerializer(serializers.ModelSerializer):
+# class MovieSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Movie
+#         fields = "__all__"
+#         # exclude =['movie_name']
+
+    
+#     def validate_movie_name(self, value):
+
+#         if len(value) <= 2:
+#             raise serializers.ValidationError("The movie name should be more than 5 character")
+#         return value
+    
+#     def validate(self, data):
+
+#         if data['movie_name'] == data['movie_desc']:
+#             raise serializers.ValidationError(" name and description cannot be same")
+#         return data
+    
+########################################
+
+
+
+# class StreamPlatformSerializer(serializers.Serializer):
+#     id = serializers.IntegerField(read_only=True)
+#     platform_name = serializers.CharField()
+#     about_platform = serializers.CharField()
+#     website_link = serializers.URLField()
+
+#     def create(self, validated_data):
+#         return StreamPlatform.objects.create(**validated_data)
+    
+#     def update(self, instance, validated_data):
+#         instance.platform_name = validated_data.get('platform_name', instance.platform_name)
+#         instance.about_platform = validated_data.get('about_platform', instance.about_platform)
+#         instance.website_link = validated_data.get('website_link', instance.website_link)
+#         instance.save()
+#         return instance
+
+
+# class WatchListSerializer(serializers.Serializer):
+
+#     id = serializers.IntegerField(read_only=True)
+#     movie_name = serializers.CharField()
+#     movie_desc = serializers.CharField()
+#     movie_status = serializers.CharField()
+#     movie_created = serializers.CharField()
+
+
+#     def create(self, validated_data):
+#         return WatchList.objects.create(**validated_data)
+    
+#     def update(self, instance, validated_data):
+#         instance.movie_name = validated_data.get('movie_name', instance.movie_name)
+#         instance.movie_desc = validated_data.get('movie_desc', instance.movie_desc)
+#         instance.movie_status = validated_data.get('movie_status', instance.movie_status)
+#         instance.movie_created = validated_data.get('movie_created', instance.movie_created)
+#         instance.save()
+#         return instance
+    
+
+    #####################################
+class StreamPlatformSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Movie
+        model = StreamPlatform
         fields = "__all__"
-        # exclude =['movie_name']
 
-    
-    def validate_movie_name(self, value):
+class WatchListSerializer(serializers.ModelSerializer):
 
-        if len(value) <= 2:
-            raise serializers.ValidationError("The movie name should be more than 5 character")
-        return value
-    
-    def validate(self, data):
+    class Meta:
+        model = WatchList
+        fields = "__all__"
 
-        if data['movie_name'] == data['movie_desc']:
-            raise serializers.ValidationError(" name and description cannot be same")
-        return data
-    
+        
+

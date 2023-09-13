@@ -1,9 +1,11 @@
-from imdb.models import WatchList, StreamPlatform
-from imdb.api.serializers import WatchListSerializer, StreamPlatformSerializer
+from imdb.models import WatchList, StreamPlatform, Review
+from imdb.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework import mixins
 
 # @api_view()
 # def movie_list(request):
@@ -209,6 +211,7 @@ class StreamPlatformListViewAv(APIView):
         serializer = StreamPlatformSerializer(movies, many=True) # , context = {'request': request}[for hyperlink]
         return Response(serializer.data)
     
+    
     def post(self, request):
         serializer = StreamPlatformSerializer(data=request.data)
         if serializer.is_valid():
@@ -221,7 +224,7 @@ class StreamPlatformDetailsViewAv(APIView):
 
     def get(self, request, pk):
         movie = StreamPlatform.objects.get(pk=pk)
-        serializer = StreamPlatformSerializer(movie)
+        serializer = StreamPlatformSerializer(movie) # context={'request': request}
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -270,7 +273,31 @@ class WatchListDetailsViewAv(APIView):
         movie.delete()
         return Response('data deleted successfully')
     
-         
-         
+# we are not writing the views, as we have written earlier using APIView or @api_view().
+# we are using the [GENERIC VIEW] with [MIXINS].
+
+class ReviewListView(mixins.ListModelMixin, 
+                     mixins.CreateModelMixin,
+                     generics.GenericAPIView):
+    
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+    
+    
 
 
+
+
+
+
+
+
+
+    

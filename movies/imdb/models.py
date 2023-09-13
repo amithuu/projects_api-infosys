@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 
@@ -27,3 +27,15 @@ class WatchList(models.Model):
 # ? the above line is to add the relations from Stream to WatchList..[which is one  to one relation][one movie can have only one platform]
 
 
+class Review(models.Model):
+    rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    description = models.CharField(max_length=200, null=True)
+    watchlist = models.ForeignKey(WatchList, on_delete=models.CASCADE, related_name='reviews')
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+    activate = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.rating) +"-"+ self.watchlist.movie_name
+
+    

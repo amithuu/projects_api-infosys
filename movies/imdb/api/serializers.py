@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from imdb.models import WatchList, StreamPlatform
+from imdb.models import WatchList, StreamPlatform, Review
 
 # [2 types of serializer, one is Serializer, ModelSerializer ]
 
@@ -144,7 +144,14 @@ from imdb.models import WatchList, StreamPlatform
 
     #####################################
 
+class ReviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Review
+        fields = "__all__"
+
 class WatchListSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True, read_only=True)
 
     class Meta:
         model = WatchList
@@ -165,3 +172,6 @@ class StreamPlatformSerializer(serializers.ModelSerializer):
 # ? watchlist = WatchListSerializer(many=True, read_only=True)
 
 # ? the above one is to set the relation with the watchlist[one platform can have multiple Movies]
+
+
+    

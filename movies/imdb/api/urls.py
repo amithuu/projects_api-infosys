@@ -25,10 +25,15 @@ from imdb.api import views
 # ]
 
 urlpatterns = [
-    path('movielist/', views.WatchListViewAv.as_view(), name = 'movie-list'),
-    path('movie<int:pk>/', views.WatchListDetailsViewAv.as_view(), name = 'movie-detail'), # 'streamplatform-detail'
-    path('streamlist/', views.StreamPlatformListViewAv.as_view(), name = 'stream-list'),
-    path('stream<int:pk>/', views.StreamPlatformDetailsViewAv.as_view(), name = 'stream-detail'),
-    path('review/', views.ReviewListView.as_view(), name = 'review-list'),
-]
+    path('movies/', views.WatchListViewAv.as_view(), name = 'movie-list'),
+    path('movie/<int:pk>/', views.WatchListDetailsViewAv.as_view(), name = 'movie-detail'), # 'streamplatform-detail' when we use hyperlinkmodelserializer
 
+    path('streams/', views.StreamPlatformListViewAv.as_view(), name = 'stream-list'),
+    path('stream/<int:pk>/', views.StreamPlatformDetailsViewAv.as_view(), name = 'stream-detail'),
+    
+    # path('reviews/', views.ReviewListViewAv.as_view(), name = 'review-list'),
+    # path('review/<int:pk>/', views.ReviewDetailViewAv.as_view(), name='review-detail'),
+
+    path('stream/<int:pk>/review/', views.ReviewListViewAv.as_view(), name='review-list'),
+    path('stream/review/<int:pk>/', views.ReviewDetailViewAv.as_view(), name = 'review-detail')
+]

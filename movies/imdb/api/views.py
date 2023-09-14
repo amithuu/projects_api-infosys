@@ -276,20 +276,62 @@ class WatchListDetailsViewAv(APIView):
 # we are not writing the views, as we have written earlier using APIView or @api_view().
 # we are using the [GENERIC VIEW] with [MIXINS].
 
-class ReviewListView(mixins.ListModelMixin, 
-                     mixins.CreateModelMixin,
-                     generics.GenericAPIView):
+
+# "using mixins"
+
+# class ReviewListView(mixins.ListModelMixin, 
+#                      mixins.CreateModelMixin,
+#                      generics.GenericAPIView):
     
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+    
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+    
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+    
+# class ReviewDetailViewAv(mixins.RetrieveModelMixin,
+#                          mixins.UpdateModelMixin,
+#                          mixins.DestroyModelMixin,
+#                          generics.GenericAPIView):
+    
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+    
+# Now we are using the concrete generic class methods..
+
+class ReviewListViewAv(generics.ListCreateAPIView):
+
+    # queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Review.objects.filter(watchlist=pk)
+
+class ReviewDetailViewAv(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-    
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-    
-    
+
+
+
+
+
+     
+     
+     
     
 
 

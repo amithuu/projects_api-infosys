@@ -311,7 +311,7 @@ class WatchListDetailsViewAv(APIView):
     
 # Now we are using the concrete generic class methods..
 
-class ReviewListViewAv(generics.ListCreateAPIView):
+class ReviewListViewAv(generics.ListAPIView):
 
     # queryset = Review.objects.all()
     serializer_class = ReviewSerializer

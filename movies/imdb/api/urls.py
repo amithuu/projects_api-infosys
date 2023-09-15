@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 # from imdb.api.views import movie_list, each_movie_list
 # from imdb.api.views import MovieListAv, MovieDetailsAv
 from imdb.api import views
+from rest_framework.routers import DefaultRouter
 
 # urlpatterns = [
 #     path('list/', movie_list, name = 'movie_list'),
@@ -23,17 +24,21 @@ from imdb.api import views
 #     path('ott/', views.StreamPlatformListView, name = 'Platform_Stream'),
 #     path('ott/<int:pk>',views.StreamPlatformDetailsView, name='Platform_List'),
 # ]
+router = DefaultRouter()
+router.register('stream', views.StreamPlatformViewVS, basename='stream')
+
 
 urlpatterns = [
     path('movies/', views.WatchListViewAv.as_view(), name = 'movie-list'),
     path('movie/<int:pk>/', views.WatchListDetailsViewAv.as_view(), name = 'movie-detail'), # 'streamplatform-detail' when we use hyperlinkmodelserializer
 
-    path('streams/', views.StreamPlatformListViewAv.as_view(), name = 'stream-list'),
-    path('stream/<int:pk>/', views.StreamPlatformDetailsViewAv.as_view(), name = 'stream-detail'),
+    # path('streams/', views.StreamPlatformListViewAv.as_view(), name = 'stream-list'),
+    # path('stream/<int:pk>/', views.StreamPlatformDetailsViewAv.as_view(), name = 'stream-detail'),
     
     # path('reviews/', views.ReviewListViewAv.as_view(), name = 'review-list'),
     # path('review/<int:pk>/', views.ReviewDetailViewAv.as_view(), name='review-detail'),
-
+    path('', include(router.urls)),
+    path('stream/<int:pk>/review-create/', views.ReviewsCreateViewAv.as_view(),name = 'review-create'),
     path('stream/<int:pk>/review/', views.ReviewListViewAv.as_view(), name='review-list'),
     path('stream/review/<int:pk>/', views.ReviewDetailViewAv.as_view(), name = 'review-detail')
 ]

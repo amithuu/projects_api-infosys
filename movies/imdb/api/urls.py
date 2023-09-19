@@ -13,10 +13,10 @@ from rest_framework.routers import DefaultRouter
 
 # urlpatterns = [
 #     path('list/', MovieListAv.as_view(), name = 'movie_list'),
-#     path('<int:pk>', MovieDetailsAv.as_view(), name = 'each_movie_list'),
+#     path('<int:pk>', Movie unique=True, blank=False,null=FalseDetailsAv.as_view(), name = 'each_movie_list'),
 # ]
 
-# for the Class based view we are using ""as.view()"" function to call the class..[which is converting into a view]
+# for the Class based view w unique=True, blank=False,null=Falsee are using ""as.view()"" function to call the class..[which is converting into a view]
 
 # urlpatterns =[
 #     path('list/', views.WatchListListView, name = 'Movie_list'),

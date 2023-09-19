@@ -3,14 +3,16 @@ from imdb.models import WatchList, StreamPlatform, Review
 from rest_framework.exceptions import ValidationError
 from imdb.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 from rest_framework.response import Response
-# from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import viewsets
-
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
+from imdb.api.permissions import AdminOrReadonly
 # @api_view()
+# @permission_classes([IsAuthenticated])
 # def movie_list(request):
 #     movies = Movie.objects.all()  
 #             #  -> getting the data
@@ -82,6 +84,7 @@ from rest_framework import viewsets
 # class MovieListAv(APIView):
 
 #     def get(self, request):
+        #   permission_classes = [IsAuthenticated]
 #         movies = Movie.objects.all()
 #         serializer = MovieSerializer(movies, many = True)
 #         return Response(serializer.data)
@@ -247,9 +250,8 @@ from rest_framework import viewsets
 
 
 
-
-
 class WatchListViewAv(APIView):
+    permission_classes  =[IsAuthenticatedOrReadOnly]  # if user is logged out, he can view movie list but he cannot access..
     def get(self, request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
@@ -264,6 +266,8 @@ class WatchListViewAv(APIView):
             return Response(serializer.errors)
         
 class WatchListDetailsViewAv(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         movie = WatchList.objects.get(pk=pk)
         serializer = WatchListSerializer(movie)
@@ -323,6 +327,7 @@ class ReviewListViewAv(generics.ListAPIView):
 
     # queryset = Review.objects.all()  i need only the review of a single movie , so removing query set and creating a function called query_set??
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]  # if user is not logged in he can not do any task..
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -330,6 +335,7 @@ class ReviewListViewAv(generics.ListAPIView):
 
 class ReviewsCreateViewAv(generics.CreateAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Review.objects.all() # this function is to get the Review objects for the user..  
@@ -360,9 +366,11 @@ class ReviewsCreateViewAv(generics.CreateAPIView):
 
 class ReviewDetailViewAv(generics.RetrieveUpdateDestroyAPIView):
 
+    permission_classes = [IsAuthenticated]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
+    
 
 # trying to write the StreamPlatformView using views.Viewset()
 
@@ -407,7 +415,7 @@ class ReviewDetailViewAv(generics.RetrieveUpdateDestroyAPIView):
 
 # creating a views using the ModelViewSet which contains all the set of [List, Retrieve, Destroy, Update,Create] functions inside it...
 class StreamPlatformViewVS(viewsets.ModelViewSet):
-
+    permission_classes = [AdminOrReadonly]
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
 
@@ -421,4 +429,3 @@ class StreamPlatformViewVS(viewsets.ModelViewSet):
 
 
     
-

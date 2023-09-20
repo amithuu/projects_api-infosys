@@ -20,5 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('watch/', include('imdb.api.urls')),
-    path('api-auth', include('rest_framework.urls')), # this will provide the default login and logout functionality
+    path('account/', include('user_app.api.urls')),
+    # path('api-auth', include('rest_framework.urls')), # this will provide the default login and logout functionality
+    # as we are adding our own authentication mechanism, no need of default authentication from rest_framework..
 ]

@@ -10,7 +10,7 @@ from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
-from imdb.api.permissions import AdminOrReadonly
+from imdb.api.permissions import AdminOrReadonly, ReviewUserOrReadonly
 # @api_view()
 # @permission_classes([IsAuthenticated])
 # def movie_list(request):
@@ -355,9 +355,20 @@ class ReviewsCreateViewAv(generics.CreateAPIView):
         if reviewed_queryset.exists(): # if any data exists in queryset, means this is user also exists and given review already
             raise ValidationError('You have already Reviewed This movie, you cannot do it again, please update if u need')
 
-        serializer.save(watchlist = watchlist, review_user = current_user)
+        if watchlist.total_ratings == 0:
+            watchlist.avr_rating = serializer.validated_data['rating']
+        else:
+            watchlist.avr_rating = (watchlist.avr_rating + serializer.validated_data['rating']) / 2
+        
+        watchlist.total_ratings = watchlist.total_ratings + 1
+        watchlist.save()
+
+
+        serializer.save(watchlist = watchlist, review_user = current_user) 
         # we need to pass both movielist and user if user is not added review..
 
+
+    
     # here we are getting the id of every movie of a single stream platform and we are storing the reviews of the single movie..
     # once we get the primary key, we are accessing the movie/watchlist from the primary key, 
     # saving the movie review inside the respected movie..
@@ -366,9 +377,11 @@ class ReviewsCreateViewAv(generics.CreateAPIView):
 
 class ReviewDetailViewAv(generics.RetrieveUpdateDestroyAPIView):
 
-    permission_classes = [IsAuthenticated]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [ReviewUserOrReadonly]
+
+    
 
     
 
@@ -415,7 +428,8 @@ class ReviewDetailViewAv(generics.RetrieveUpdateDestroyAPIView):
 
 # creating a views using the ModelViewSet which contains all the set of [List, Retrieve, Destroy, Update,Create] functions inside it...
 class StreamPlatformViewVS(viewsets.ModelViewSet):
-    permission_classes = [AdminOrReadonly]
+    
+    permission_classes = [IsAdminUser]
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
 

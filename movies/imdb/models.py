@@ -18,6 +18,8 @@ class WatchList(models.Model):
     movie_desc = models.CharField(max_length=150)
     platform = models.ForeignKey(StreamPlatform,on_delete=models.CASCADE, related_name='watchlist')
     movie_status = models.BooleanField(default=True)
+    avr_rating  = models.FloatField(default=0)
+    total_ratings = models.IntegerField(default=0)
     movie_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

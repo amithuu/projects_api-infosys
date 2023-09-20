@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'imdb',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
+    'user_app',
 ]
 
 MIDDLEWARE = [
@@ -125,8 +127,23 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES':[
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
-# }
-# the above method/blog is to provide the access to the user..more than that for the permissions with the user..>>
+
+
+REST_FRAMEWORK={
+    #'DEFAULT_PERMISSION_CLASSES':[
+    #         'rest_framework.permissions.IsAuthenticated',
+    #     ],
+    # the above method/blog is to provide the access to the user..more than that for the permissions with the user..>>
+
+    #'DEFAULT_AUTHENTICATION_CLASSES':[
+    #     'rest_framework.authentication.BasicAuthentication',
+    #     # 'rest_framework.authentication.SessionAuthentication',
+    # ],
+    # the above method/blog is check the access using Basic authentication, which adds for all the class by default.>>
+
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # the above blog/method is to provide the permission using token authentication..>>
+}
+ 

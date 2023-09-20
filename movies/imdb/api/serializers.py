@@ -8,7 +8,7 @@ from imdb.models import WatchList, StreamPlatform, Review
 # this is using validators and function based for each value!!!
 # def len_name(value):
 #     if len(value) <= 2:
-#         raise serializers.ValidationError(" the name must be more than 5 charcters")
+#         raise serializers.ValidationError(" the name must be more than 5 characters ")
 
 # class MovieSerializer(serializers.Serializer):
 #     id = serializers.IntegerField(read_only=True)

@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-ewpa-tl%3u9_&e9#*-t2ie%uuiodve(2xi2gz3p-9^-ok$rlq_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['.vercel.app', '198.211.99.20', 'localhost', '127.0.0.1', 'https://django-deployment-check1.vercel.app',]
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['.vercel.app', '198.211.99.20', 'localhost', '127.0.0.1', 'https://django-deployment-check1.vercel.app',] #? u need to install nodejs and npm to deploy in vercel
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
 
 
 
@@ -160,3 +160,5 @@ REST_FRAMEWORK={
     # ? above one is for simplejwt authentication library we are using for auth and token , now instead of basic authentication!!
 }
 
+STATICFILES_DIRS = [BASE_DIR/'static',]
+STATIC_ROOT = BASE_DIR/'staticfiles'

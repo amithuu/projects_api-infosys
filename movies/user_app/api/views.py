@@ -56,5 +56,4 @@ def register_view(request):
             return Response(user_data, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(user_data)
-        return Response(json.dumps(user_data)
         

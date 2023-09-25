@@ -1,0 +1,8 @@
+As we see in the image
+ step:1 when the user enters the login username and password in the back-end by default using jwt, we create and [Access Token and Refresh Token]
+ step:2 where [Access Token] is only valid for 5min and [Refresh Token] is only valid for 24hrs 
+ step:3 when the [Access Token] gets destroyed by using the [Refresh Token] it automatically Generate a new Access Token,
+ step:4 But we can configure refresh token and access token how we need!!! 
+ step:5 and one more thing is we dnt store tha token in database , it store sin local storage..[which improves the performance of application and security as well]
+
+ 

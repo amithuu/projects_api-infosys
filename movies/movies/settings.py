@@ -37,10 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'imdb',
+
+    # ? third party libraries
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
+
+    # * user apps
     'user_app',
+    'imdb',
+
 ]
 
 MIDDLEWARE = [
@@ -133,17 +139,22 @@ REST_FRAMEWORK={
     #'DEFAULT_PERMISSION_CLASSES':[
     #         'rest_framework.permissions.IsAuthenticated',
     #     ],
-    # the above method/blog is to provide the access to the user..more than that for the permissions with the user..>>
+    #  ? the above method/blog is to provide the access to the user..more than that for the permissions with the user..>>
 
     #'DEFAULT_AUTHENTICATION_CLASSES':[
     #     'rest_framework.authentication.BasicAuthentication',
     #     # 'rest_framework.authentication.SessionAuthentication',
     # ],
-    # the above method/blog is check the access using Basic authentication, which adds for all the class by default.>>
+    # ? the above method/blog is check the access using Basic authentication, which adds for all the class by default.>>
+
+    # 'DEFAULT_AUTHENTICATION_CLASSES':[
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ],
+    # ? the above blog/method is to provide the permission using token authentication..>>
 
     'DEFAULT_AUTHENTICATION_CLASSES':[
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # the above blog/method is to provide the permission using token authentication..>>
+    # ? above one is for simplejwt authentication library we are using for auth and token , now instead of basic authentication!!
 }
- 
+

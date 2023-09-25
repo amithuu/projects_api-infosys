@@ -30,6 +30,7 @@ router.register('stream', views.StreamPlatformViewVS, basename='stream')
 
 urlpatterns = [
     path('movies/', views.WatchListViewAv.as_view(), name = 'movie-list'),
+    path('movie-create/', views.WatchlistCreateViewAv.as_view(), name = 'movie-create'),
     path('<int:pk>', views.WatchListDetailsViewAv.as_view(), name = 'movie-detail'), # 'streamplatform-detail' when we use hyperlinkmodelserializer
 
     # path('streams/', views.StreamPlatformListViewAv.as_view(), name = 'stream-list'),

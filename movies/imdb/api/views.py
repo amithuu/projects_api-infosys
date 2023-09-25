@@ -256,7 +256,9 @@ class WatchListViewAv(APIView):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
         return Response(serializer.data)
-    
+class WatchlistCreateViewAv(APIView):
+
+    permission_classes  =[IsAdminUser] 
     def post(self, request):
         serializer = WatchListSerializer(data=request.data)
         if serializer.is_valid():

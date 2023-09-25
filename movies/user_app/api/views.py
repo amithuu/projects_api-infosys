@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from user_app import models
-
+# from user_app import models
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 @api_view(['POST',])
@@ -41,17 +41,22 @@ def register_view(request):
             user_data['result']['username'] = user.username
             user_data['result']['email'] = user.email
 
-            # ! here we are getting the token and adding it to user_data api!! 
+            # ! here we are getting the token and adding it to user_data api!! we are using Token.Models for this
             # token = Token.objects.get(user = user).key
             # user_data['result']['token'] = token
 
-            for user in User.objects.all():
-                token = Token.objects.get_or_create(user=user).key
-            user_data['result']['token'] = token
+            # for user in User.objects.all():
+            #     token = Token.objects.get_or_create(user=user).key
+            # user_data['result']['token'] = token
 
+            refresh = RefreshToken.for_user(user)
+            user_data['result']['token'] = {
+                'refresh': str(refresh),
+                'access' :str(refresh.access_token),
+            }
         
         else:
-            user_data['message'] = 'UnSuccessful'  # ! if the  data is not valid , then this will override the [message and status] fields.
+            user_data['message'] = 'UnSuccessful'  # ! if the data is not valid , then this will override the [message and status] fields.
             user_data['status'] = 'Fail'
             return Response(user_data, status=status.HTTP_400_BAD_REQUEST)
         

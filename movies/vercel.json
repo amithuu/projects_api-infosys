@@ -1,4 +1,4 @@
-{
+/* {
     "builds": [{
         "src": "movies/wsgi.py",
         "use": "@ardnt/vercel-python-wsgi",
@@ -10,4 +10,4 @@
             "dest": "movies/wsgi.py"
         }
     ]
-}
+} */

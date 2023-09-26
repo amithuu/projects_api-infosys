@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,8 +26,11 @@ SECRET_KEY = 'django-insecure-ewpa-tl%3u9_&e9#*-t2ie%uuiodve(2xi2gz3p-9^-ok$rlq_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['.vercel.app', '198.211.99.20', 'localhost', '127.0.0.1', 'https://django-deployment-check1.vercel.app',] #? u need to install nodejs and npm to deploy in vercel
-ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']
+ #? u need to install nodejs and npm to deploy in vercel
+# ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','amithkulkarni..pythonanywhere.com']
+
+
 
 
 
@@ -66,7 +70,7 @@ ROOT_URLCONF = 'movies.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [], #[os.path.join(BASE_DIR, 'templates')] IF WE have templates any html files.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,10 +90,10 @@ WSGI_APPLICATION = 'movies.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
@@ -128,6 +132,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -159,4 +164,3 @@ REST_FRAMEWORK={
     ],
     # ? above one is for simplejwt authentication library we are using for auth and token , now instead of basic authentication!!
 }
-

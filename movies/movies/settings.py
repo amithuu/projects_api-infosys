@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ewpa-tl%3u9_&e9#*-t2ie%uuiodve(2xi2gz3p-9^-ok$rlq_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
  #? u need to install nodejs and npm to deploy in vercel
 # ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']

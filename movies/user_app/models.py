@@ -22,3 +22,6 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 # ! the above model is used to create token for every user 
+
+
+

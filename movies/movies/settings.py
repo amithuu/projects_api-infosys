@@ -22,15 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ewpa-tl%3u9_&e9#*-t2ie%uuiodve(2xi2gz3p-9^-ok$rlq_'
+# SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
  #? u need to install nodejs and npm to deploy in vercel
 # ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']
-ALLOWED_HOSTS = ['localhost','amithkulkarni..pythonanywhere.com']
-
-
+# ALLOWED_HOSTS = ['localhost','amithkulkarni..pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 
@@ -90,6 +90,15 @@ WSGI_APPLICATION = 'movies.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
+    # {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': config('DB_NAME'),
+    #     'USER': config('DB_USERNAME'),
+    #     'PASSWORD': config('DB_PASSWORD'),
+    #     'HOST': config('DB_HOSTNAME'),
+    #     'PORT': config('DB_PORT', cast=int),
+    # }
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -132,7 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -163,4 +172,13 @@ REST_FRAMEWORK={
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     # ? above one is for simplejwt authentication library we are using for auth and token , now instead of basic authentication!!
+    # 'DEFAULT_THROTTLE_CLASSES':[
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle',
+    # ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '3/day',
+        'user': '5/day'
+    }
+    # ? the above one is for the throttle, where in the user can access the "api" for only a set of limits provided.. 
 }

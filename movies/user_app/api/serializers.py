@@ -1,4 +1,4 @@
-# from user_app.models import Register 
+# from user_app.models import Register
 from django.contrib.auth.models import User 
 # ! here we are using USer Model which gives [username, email,password] by default
 from rest_framework import serializers
@@ -36,3 +36,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         # ! This may be because you have a writable field on the serializer class that is not a valid argument to `User.objects.create()`. 
         # ! You may need to make the field read-only, or override the RegisterSerializer.create() method to handle this correctly.
         
+
+
+    

@@ -79,7 +79,7 @@ from imdb.models import WatchList, StreamPlatform, Review
 
 
 ###############################################################################################
-# [but now learning ModelSerializer]
+# [now learning ModelSerializer]
 
 # class MovieSerializer(serializers.ModelSerializer):
 #     class Meta:

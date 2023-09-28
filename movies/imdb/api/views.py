@@ -11,6 +11,7 @@ from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from imdb.api.permissions import AdminOrReadonly, ReviewUserOrReadonly
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 # @api_view()
 # @permission_classes([IsAuthenticated])
 # def movie_list(request):
@@ -330,6 +331,7 @@ class ReviewListViewAv(generics.ListAPIView):
     # queryset = Review.objects.all()  i need only the review of a single movie , so removing query set and creating a function called query_set??
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]  # if user is not logged in he can not do any task..
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]  # user can access only the respected the time of rate that is defined in the settings..
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -338,7 +340,7 @@ class ReviewListViewAv(generics.ListAPIView):
 class ReviewsCreateViewAv(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
-
+    
     def get_queryset(self):
         return Review.objects.all() # this function is to get the Review objects for the user..  
     
@@ -379,11 +381,15 @@ class ReviewsCreateViewAv(generics.CreateAPIView):
 
 class ReviewDetailViewAv(generics.RetrieveUpdateDestroyAPIView):
 
-    queryset = Review.objects.all()
+    queryset = Review.objects.all()  
+    # ? getting all the data from Reviews. 
     serializer_class = ReviewSerializer
-    permission_classes = [ReviewUserOrReadonly]
 
-    
+    permission_classes = [ReviewUserOrReadonly]
+    # ? only the respected user can edit the review an others can view the review.
+
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    # ?  # user can access only the respected the time of rate that is defined in the settings..
 
     
 
@@ -434,14 +440,3 @@ class StreamPlatformViewVS(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
-
-
-
-
-
-
-
-
-
-
-    

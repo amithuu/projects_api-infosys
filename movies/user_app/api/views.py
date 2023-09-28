@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-# from user_app import models
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -14,7 +13,6 @@ def logout_view(request):
     if request.method == 'POST':
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
-
 
 
 
@@ -61,4 +59,4 @@ def register_view(request):
             return Response(user_data, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(user_data)
-        
+

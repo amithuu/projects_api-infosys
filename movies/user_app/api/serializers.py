@@ -1,7 +1,8 @@
 # from user_app.models import Register
 from django.contrib.auth.models import User 
-# ! here we are using USer Model which gives [username, email,password] by default
+# ! here we are using User Model which gives [username, email,password] by default
 from rest_framework import serializers
+from user_app.models import JobPost
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(style={'input_type':'password'},write_only=True)
@@ -37,5 +38,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         # ! You may need to make the field read-only, or override the RegisterSerializer.create() method to handle this correctly.
         
 
-
+class JobPostSerializer(serializers.ModelSerializer):
     
+    class Meta:
+        model = JobPost
+        fields = "__all__"
+    
+    # min_length = 20
+    # def validate_job_title(self, value):
+    #     if value is None or len(value) == 0:
+    #         raise serializers.ValidationError('This field is required')
+        
+    #     elif len(value) > self.min_length:
+    #         message = 'The title length should be less than or equal to 20 characters'.format(self.min_length)
+    #         raise serializers.ValidationError(message)
+    #     return value
+        
+        
+
+        

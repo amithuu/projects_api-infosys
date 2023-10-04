@@ -5,6 +5,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics 
+from user_app.models import JobPost
+from . import serializers
+from django.contrib.auth.models import User
 
 
 @api_view(['POST',])
@@ -60,3 +65,38 @@ def register_view(request):
         
         return Response(user_data)
 
+class JobPostListCreate(generics.ListCreateAPIView):
+    
+    # permission_classes = [IsAuthenticated,]
+    serializer_class = serializers.JobPostSerializer
+    queryset = JobPost.objects.all()
+
+    
+    def perform_create(self, serializer):
+        
+        try:
+            serializer.save()
+            data = serializer.data
+            user_data ={'message' : "Successfully sending the user",
+                        'status' : "success",
+                        "result":{ data }
+            }
+            print(data)
+            return Response(user_data, status=status.HTTP_201_CREATED,  content_type='application/json')
+        
+        except Exception as e:
+            response_data = {
+                "message": "Error creating JobPost",
+                "status": "error",
+                "error": str(e)
+            }
+            return Response(response_data, status=status.HTTP_400_BAD_REQUEST,  content_type='application/json')
+    
+    
+class JobPostUpdate(generics.RetrieveUpdateDestroyAPIView):
+    
+    # permission_classes = [IsAuthenticated,]
+    queryset = JobPost.objects.all()
+    serializer_class = serializers.JobPostSerializer
+
+    

@@ -176,5 +176,4 @@ class StreamPlatformSerializer(serializers.ModelSerializer):
 
 # ? the above one is to set the relation with the watchlist[one platform can have multiple Movies]
 
-
     

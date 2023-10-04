@@ -12,6 +12,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from imdb.api.permissions import AdminOrReadonly, ReviewUserOrReadonly
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+
+
 # @api_view()
 # @permission_classes([IsAuthenticated])
 # def movie_list(request):
@@ -351,7 +353,7 @@ class ReviewsCreateViewAv(generics.CreateAPIView):
         watchlist = WatchList.objects.get(pk=pk)
 
         # checking whether the user has already added review if added for a movie, he cannot add again
-
+        
         current_user = self.request.user
         reviewed_queryset = Review.objects.filter(watchlist=watchlist, review_user = current_user) 
 
@@ -439,4 +441,5 @@ class StreamPlatformViewVS(viewsets.ModelViewSet):
     
     permission_classes = [IsAdminUser]
     queryset = StreamPlatform.objects.all()
-    serializer_class = StreamPlatformSerializer
+    serializer_class = StreamPlatformSerializer 
+    

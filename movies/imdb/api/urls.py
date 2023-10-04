@@ -43,4 +43,5 @@ urlpatterns = [
     path('<int:pk>/review-create', views.ReviewsCreateViewAv.as_view(),name = 'review-create'),
     path('<int:pk>/reviews', views.ReviewListViewAv.as_view(), name='review-list'),
     path('review/<int:pk>', views.ReviewDetailViewAv.as_view(), name = 'review-detail'),
+    
 ]

@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User 
 # ! here we are using User Model which gives [username, email,password] by default
 from rest_framework import serializers
-from user_app.models import JobPost
+from user_app.models import JobPost, Job_Post, HardSkill, SoftSkill, IndustryExperience, CompanyExperience, Location, Language, Benefits, SupplementPay
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(style={'input_type':'password'},write_only=True)
@@ -44,16 +44,149 @@ class JobPostSerializer(serializers.ModelSerializer):
         model = JobPost
         fields = "__all__"
     
-    # min_length = 20
-    # def validate_job_title(self, value):
-    #     if value is None or len(value) == 0:
-    #         raise serializers.ValidationError('This field is required')
-        
-    #     elif len(value) > self.min_length:
-    #         message = 'The title length should be less than or equal to 20 characters'.format(self.min_length)
-    #         raise serializers.ValidationError(message)
-    #     return value
-        
-        
 
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ['location', 'remote_job',]  
+
+class HardSkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HardSkill
+        fields = ['hard_skill', 'deal_breaker', 'hard_skill_expertise',]
         
+class SoftSkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SoftSkill
+        fields = ['soft_skill', 'soft_skill_expertise',]
+        
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ['language', 'language_expertise', 'deal_breaker',]
+        
+        
+class IndustryExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IndustryExperience
+        fields = ['industry', 'minimum_industry_experience',]
+        
+class CompanyExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyExperience
+        fields = ['company', 'minimum_company_experience',]
+        
+class BenefitsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Benefits
+        fields = ['benefit',]
+
+class SupplementPaySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = SupplementPay
+        fields = ['supplement_pay',]    
+        
+class Job_PostSerializer(serializers.ModelSerializer):
+    locations = LocationSerializer(many=True)
+    hard_skills = HardSkillSerializer(many=True)
+    soft_skills = SoftSkillSerializer(many=True)
+    languages = LanguageSerializer(many=True)
+    industrys = IndustryExperienceSerializer(many=True)
+    companys = CompanyExperienceSerializer(many=True)
+    benefits = BenefitsSerializer(many=True)
+    supplement_pays = SupplementPaySerializer(many=True)
+    
+    class Meta:
+        model = Job_Post
+        fields = [
+            'id', 'created_on', 'creator', 'job_title', 'management_level', 'job_type',
+            'no_of_openings', 'days', 'specific_timing', 'specific_time', 'flexible_timing',
+            'flexible_time', 'minimum_years_experience', 'maximum_years_experience',
+            'roles_responsibility', 'minimum_pay', 'maximum_pay',
+            'notice_period', 'blind_hire', 'locations', 'hard_skills',
+            'soft_skills', 'languages', 'industrys', 'companys', 'benefits', 'supplement_pays',
+        ]
+        extra_kwargs = {
+            'creator': {'read_only': True},
+        }
+
+    def create(self, validated_data):
+        locations_data = validated_data.pop('locations')
+        hard_skills_data = validated_data.pop('hard_skills')
+        soft_skills_data = validated_data.pop('soft_skills')
+        languages_data = validated_data.pop('languages')
+        industrys_data = validated_data.pop('industrys')
+        companys_data = validated_data.pop('companys')
+        benefits_data = validated_data.pop('benefits')
+        supplement_pays_data = validated_data.pop('supplement_pays')
+
+        job_post = Job_Post.objects.create(**validated_data)
+
+        for location_data in locations_data:
+            Location.objects.create(job_post=job_post, **location_data)
+
+        for hard_skill_data in hard_skills_data:
+            HardSkill.objects.create(job_post=job_post, **hard_skill_data)
+
+        for soft_skill_data in soft_skills_data:
+            SoftSkill.objects.create(job_post=job_post, **soft_skill_data)
+
+        for language_data in languages_data:
+            Language.objects.create(job_post=job_post, **language_data)
+
+        for industry_data in industrys_data:
+            IndustryExperience.objects.create(job_post=job_post, **industry_data)
+
+        for company_data in companys_data:
+            CompanyExperience.objects.create(job_post=job_post, **company_data)
+
+        for benefit_data in benefits_data:
+            Benefits.objects.create(job_post=job_post, **benefit_data)
+
+        for supplement_pay_data in supplement_pays_data:
+            SupplementPay.objects.create(job_post=job_post, **supplement_pay_data)
+
+        return job_post
+    
+    
+    def update(self, instance, validated_data):
+        locations_data = validated_data.pop('locations', [])
+        hard_skills_data = validated_data.pop('hard_skills', [])
+        soft_skills_data = validated_data.pop('soft_skills', [])
+        languages_data = validated_data.pop('languages', [])
+        industrys_data = validated_data.pop('industrys', [])
+        companys_data = validated_data.pop('companys', [])
+        benefits_data = validated_data.pop('benefits', [])
+        supplement_pays_data = validated_data.pop('supplement_pays', [])
+
+        instance = super().update(instance, validated_data)
+
+        for location_data in locations_data:
+            Location.objects.create(job_post=instance, **location_data)
+
+        for hard_skill_data in hard_skills_data:
+            HardSkill.objects.create(job_post=instance, **hard_skill_data)
+
+        for soft_skill_data in soft_skills_data:
+            SoftSkill.objects.create(job_post=instance, **soft_skill_data)
+
+        for language_data in languages_data:
+            Language.objects.create(job_post=instance, **language_data)
+
+        for industry_data in industrys_data:
+            IndustryExperience.objects.create(job_post=instance, **industry_data)
+
+        for company_data in companys_data:
+            CompanyExperience.objects.create(job_post=instance, **company_data)
+
+        for benefit_data in benefits_data:
+            Benefits.objects.create(job_post=instance, **benefit_data)
+
+        for supplement_pay_data in supplement_pays_data:
+            SupplementPay.objects.create(job_post=instance, **supplement_pay_data)
+
+        return instance
+    
+    def destroy(self, instance):
+        instance.delete()

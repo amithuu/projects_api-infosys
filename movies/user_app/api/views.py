@@ -5,11 +5,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics 
-from user_app.models import JobPost
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework import generics, permissions
+from user_app.models import JobPost, Job_Post
 from . import serializers
 from django.contrib.auth.models import User
+from config.custom_response import *
+from django.core.exceptions import PermissionDenied
 
 
 @api_view(['POST',])
@@ -67,36 +69,123 @@ def register_view(request):
 
 class JobPostListCreate(generics.ListCreateAPIView):
     
-    # permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated,IsAdminUser]
     serializer_class = serializers.JobPostSerializer
-    queryset = JobPost.objects.all()
+    
+    def get_queryset(self):
+        user = self.request.user
+        queryset = JobPost.objects.filter(created_by = user)
+        if queryset.exists():
+            return queryset
+        else:
+            return validationError('you have not added any Jb_pOst please add to View')
+            
 
     
     def perform_create(self, serializer):
         
         try:
-            serializer.save()
+            serializer.is_valid(raise_exception=True)
+            serializer.save(created_by = self.request.user)
             data = serializer.data
-            user_data ={'message' : "Successfully sending the user",
-                        'status' : "success",
-                        "result":{ data }
-            }
-            print(data)
-            return Response(user_data, status=status.HTTP_201_CREATED,  content_type='application/json')
-        
+            return sendSuccess(data)
+            
         except Exception as e:
-            response_data = {
-                "message": "Error creating JobPost",
-                "status": "error",
+            user_data = {
                 "error": str(e)
             }
-            return Response(response_data, status=status.HTTP_400_BAD_REQUEST,  content_type='application/json')
+            return sendError(user_data)
     
     
 class JobPostUpdate(generics.RetrieveUpdateDestroyAPIView):
     
-    # permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated,IsAdminUser]
     queryset = JobPost.objects.all()
     serializer_class = serializers.JobPostSerializer
 
+    def perform_update(self, serializer):
+        job_post = self.get_object()
+        if job_post.created_by == self.request.user:
+            serializer.save()
+        else:
+            raise PermissionDenied("You are not allowed to update this job post.")
+
+    def perform_destroy(self, instance):
+        if instance.created_by == self.request.user:
+            instance.delete()
+        else:
+            raise PermissionDenied("You are not allowed to delete this job post.")
+
+
+
+class Job_PostList(generics.ListAPIView):
     
+    permission_classes = [IsAuthenticated,]
+    serializer_class = serializers.Job_PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Job_Post.objects.filter(creator=user)
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            message = 'you have not created any posts yet please create one'
+            return sendError(message)
+        else:
+            serializer = self.get_serializer(queryset, many=True)
+            return sendSuccess(serializer.data)
+        
+class Job_PostCreate(generics.CreateAPIView):
+    
+    permission_classes = [IsAuthenticated,]
+    serializer_class  = serializers.Job_PostSerializer
+    
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+        
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(creator=self.request.user)
+            return sendSuccess(serializer.data)
+        else:
+            return sendError(serializer.errors)
+    
+    
+class Job_PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    
+    permission_classes = [IsAuthenticated,]
+    serializer_class = serializers.Job_PostSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Job_Post.objects.filter(creator=user)
+    
+    def perform_update(self, serializer):
+        job_post = self.get_object()
+        if job_post.creator == self.request.user:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            return validationError('you are not allowed to update this job post')
+        
+    def perform_destroy(self, serializer):
+        job_post = self.get_object()
+        if job_post.creator == self.request.user:
+            job_post.delete()
+        else:
+            return validationError('You are not allowed to Delete the Job_post')
+        
+
+        
+    
+    
+    
+    
+
+        
+            
+        
+

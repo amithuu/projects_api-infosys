@@ -11,26 +11,26 @@ class CustomLengthValidator(serializers.Serializer):
         
     def __call__(self, value):
         
-        
-        if value is None:
-            raise serializers.ValidationError(f'{self.field_name} field is required')
-        
-        elif self.min_length is not None and len(value) < self.min_length:
-            message = f'The length of {self.field_name} should be more than or equal to {self.min_length} characters'
-            raise serializers.ValidationError(message)
-        elif self.max_length is not None and len(value) > self.max_length:
-            message = f'The length of {self.field_name} should be less than or equal to {self.max_length} characters'
-            raise serializers.ValidationError(message)
-        
-        elif self.min_value == 0:
-            message = f'{value} cannot be Zero'
-            raise serializers.ValidationError(message)
-        elif self.min_value is not None and value < self.min_value:
-            message = f'The value of {self.field_name} should be more than or equal to {self.min_value}'
-            raise serializers.ValidationError(message)
-        elif self.max_value is not None and value > self.max_value:
-            message = f'The value of {self.field_name} should be less than or equal to {self.max_value}'
-            raise serializers.ValidationError(message)
+        if value == str:
+            if value is None:
+                raise serializers.ValidationError(f'{self.field_name} field is required')
+            
+            elif self.min_length is not None and len(value) < self.min_length:
+                message = f'The length of {self.field_name} should be more than or equal to {self.min_length} characters'
+                raise serializers.ValidationError(message)
+            elif self.max_length is not None and len(value) > self.max_length:
+                message = f'The length of {self.field_name} should be less than or equal to {self.max_length} characters'
+                raise serializers.ValidationError(message)
+        else:
+            if self.min_value == 0:
+                message = f'{value} cannot be Zero'
+                raise serializers.ValidationError(message)
+            elif self.min_value is not None and value < self.min_value:
+                message = f'The value of {self.field_name} should be more than or equal to {self.min_value}'
+                raise serializers.ValidationError(message)
+            elif self.max_value is not None and value > self.max_value:
+                message = f'The value of {self.field_name} should be less than or equal to {self.max_value}'
+                raise serializers.ValidationError(message)
         
         return value
     

@@ -16,5 +16,10 @@ urlpatterns=[
     
     path('job_post/', views.JobPostListCreate.as_view(), name = 'job_post_list'),
     path('job_post/<pk>/', views.JobPostUpdate.as_view(), name = 'job_post_detail'),
+    
+    path('job_posts/', views.Job_PostList.as_view(), name = 'job_post'),
+    path('job_posts/create/', views.Job_PostCreate.as_view(), name = 'job_post_create'),
+    path('job_posts/<pk>/', views.Job_PostDetail.as_view(), name = 'job_post'),
+    
 ]
 

@@ -10,16 +10,13 @@ urlpatterns=[
     
     path('api/token', TokenObtainPairView.as_view(), name = 'token_obtain_pair'), #? login
     path('api/token/refresh', TokenRefreshView.as_view(), name = 'token_refresh_view'),  #? Register
-
-    # path('jobpostlist', views.JobPostList.as_view(), name = 'job_post_list_create'),
-    # path('jobpost/<', views.JobPostDetail.as_view(), name = 'job_post_update'),
     
-    path('job_post/', views.JobPostListCreate.as_view(), name = 'job_post_list'),
-    path('job_post/<pk>/', views.JobPostUpdate.as_view(), name = 'job_post_detail'),
+    path('job_post/', views.PostListAPIView.as_view(), name = 'job_post_list'),
+    path('job_post/create', views.PostCreateAPIView.as_view(), name = 'job_post_create'),
+    path('job_post/<pk>/', views.PostUpdateAPIView.as_view(), name = 'job_post_detail'),
     
-    path('job_posts/', views.Job_PostList.as_view(), name = 'job_post'),
-    path('job_posts/create/', views.Job_PostCreate.as_view(), name = 'job_post_create'),
-    path('job_posts/<pk>/', views.Job_PostDetail.as_view(), name = 'job_post'),
+    path('onboarding/', views.OnboardingListCreateView, name = 'onboarding'),
+    path('onboarding/<pk>/', views.OnboardingUpdateView, name = 'onboarding'),
     
 ]
 

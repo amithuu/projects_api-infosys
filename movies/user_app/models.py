@@ -3,6 +3,10 @@ from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator, MaxValueValidator
 from user_app.api.validators import CustomLengthValidator
 from django.contrib.auth.models import User
+from config.constants import DAYS_CHOICE, SKILL_LEVEL_CHOICES, SUPPLEMENT_PAY_CHOICES, SCALE_OF_COMPANY
+# from timestamps.models import models, Timestampable, SoftDeletes  
+
+
 # Create your models here.
 # class Register(models.Model):
 #     firstname = models.CharField(max_length=10)
@@ -26,204 +30,201 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 # ! the above model is used to create token for every user 
 
-
-SKILL_LEVEL_CHOICES = [
-        ('beginner', 'Beginner'),
-        ('intermediate', 'Intermediate'),
-        ('advanced', 'Advanced'),
-    ]
-
-
 class JobPost(models.Model):
-    #* Basic details page=======================================
-    
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    job_title = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='job_title')])
-    functional_area = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='functional_area')])
-    management_level = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='management_level')])
-    no_of_openings = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=50, field_name='no_of_openings')])
-    job_type = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='job_type')])
-    location = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=8, max_length=255, field_name='location')])
-    remote_job = models.BooleanField()
-    specific_timing = models.BooleanField(default=False)
-    specific_time = models.TimeField(null=True, blank=True)
-    flexible_timing = models.BooleanField(default=False)
-    flexible_time = models.TimeField(null=True, blank=True)
-    
-    
-    #* Skills page============================================
-    
-    #? hard skills
-    hard_skill = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='hard_skill')])
-    hard_kill_expertise_level = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=10, field_name="hard_kill_expertise_level")]) 
-    deal_breaker_hard_skill = models.BooleanField(default=False)
-    
-    #? Soft skill
-    soft_skills = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name="soft_skills")])
-    soft_skill_expertise_level = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=10, field_name="soft_skill_expertise_level")])
-    
-    #? languages 
-    language = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'language')])
-    language_expertise_level = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=10, field_name= 'language_expertise_level')])
-    deal_breaker_language = models.BooleanField(default=False)
-    
-    # * Experience==========================================
-    
-    # ? overall experience
-    min_years_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=50, field_name= 'min_years_experience')])
-    
-    max_years_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=50, field_name= 'max_years_experience')])
-    
-    include_fresher = models.BooleanField(default=False)
-    
-    # ? industry Experience 
-    industry_experience = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=3, max_length=255, field_name= 'industry_experience')])
-    min_years_industry_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=50, field_name= 'min_years_industry_experience')])
-    max_years_industry_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=50, field_name= 'max_years_industry_experience')])
-    
-    # ? company experience
-    company_experience = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=8, max_length=255, field_name= 'company_experience')])
-    min_years_company_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=50, field_name= 'min_years_company_experience')])
-
-    # ! education level field will be adding in the future///  
-
-    # * Roles and Responsibility===================================
-    roles_responsibility = models.TextField(validators=[CustomLengthValidator(min_length=10, max_length=255, field_name= 'roles_responsibility')])
-    
-    
-    # * Pay and Benefits================================
-    # ? Minimum salary max pay scale
-    #! dollar symbol and rupees Symbol field need to be added
-    min_pay_salary = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=500000000000,field_name= 'min_pay_salary')])
-    max_pay_salary = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=500000000000, field_name= 'max_pay_salary')])
-    
-    # supplemental_pay =  models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'supplemental_pay')])
-    benefits = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=8, max_length=255, field_name= 'benefits')])
-    
-    # * Notice Period==================================
-    notice_period = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=50, field_name= 'notice_period')])
-    blind_hire = models.BooleanField(default=False)
-    
-    
-    def __str__(self):
-        return self.job_title + ' ' + str(self.id)
-
-Days_Choice = [
-    ('Monday-Friday', 'monday-friday'),
-    ('Monday-Saturday', 'monday-saturday'), 
-    ('Flexible', 'flexible'),
-]
-
-SKILL_LEVEL_CHOICES = [
-        ('beginner', 'Beginner'),
-        ('intermediate', 'Intermediate'), 
-        ('advanced','Advanced'),   
-    ]
-Extra_PAY_Choice =[
-    ('Performance Bonus', 'performance bonus'),
-    ('Yearly Bonus', 'yearly bonus'),
-    ('Quarterly Bonus', 'quarterly bonus'), 
-    ('Commission', 'commission'), 
-    ('Overtime Pay', 'overtime pay'),  
-    ('Shift Allowance', 'shift allowance'), 
-    ('Joining Bonus', 'joining bonus'), 
-    ('ESOP', 'esop'),    
-]
-
-
-class Job_Post(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
-    created_on = models.DateTimeField(auto_now_add=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    job_title = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='job_title')])
-    management_level = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='management_level')])
-    job_type = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='job_type')])
-    no_of_openings = models.IntegerField(validators=[CustomLengthValidator(min_length=1, max_length=50, field_name='no_og_openings')])
-    days = models.CharField(max_length=17 ,choices=Days_Choice)
-    specific_timing = models.BooleanField()
-    specific_time = models.TimeField()
-    flexible_timing = models.BooleanField()
-    flexible_time = models.TimeField()
-    minimum_years_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'minimum_years_experience')])
-    maximum_years_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'maximum_years_experience')])
-    roles_responsibility = models.TextField(max_length=255, validators=[CustomLengthValidator(min_length=8, max_length=255, field_name= 'roles_responsibility')])
-    minimum_pay = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=100000, field_name= 'minimum_pay')])
-    maximum_pay = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=100000, field_name= 'maximum_pay')])
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='title')])
+    description = models.TextField(null=True)
+    functional_area = models.CharField(null=True, max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='functional_area')])
+    management_level = models.CharField(null=True, max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='management_level')])
+    job_type = models.CharField(null=True, max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name='job_type')])
+    opening_slots = models.IntegerField(default=0, validators=[CustomLengthValidator(min_length=1, max_length=50, field_name='opening_slots')])
+    is_remote = models.BooleanField(default=False)  
+    schedule_days = models.CharField(null=True, max_length=30 ,choices=DAYS_CHOICE)
+    specific_timing = models.BooleanField(default=False)
+    start_specific_time = models.TimeField(null=True)
+    end_specific_time = models.TimeField(null=True)
+    flexible_timing = models.BooleanField(default=False)
+    flexible_time = models.TimeField(null=True)
+    min_years_experience = models.IntegerField(null=True, validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'min_years_experience')])
+    max_years_experience = models.IntegerField(null=True, validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'max_years_experience')])
+    education_level = models.CharField(null=True, max_length=30) 
+    include_freshers = models.BooleanField(default=False) 
+    roles_responsibilities = models.TextField(null=True, max_length=255, validators=[CustomLengthValidator(min_length=8, max_length=255, field_name= 'roles_responsibilities')])
+    pay_currency = models.CharField(null=True, max_length=4)
+    min_pay = models.CharField(null=True, max_length=255, validators=[CustomLengthValidator(min_length=1, max_length=256, field_name= 'min_pay')])
+    max_pay = models.CharField(null=True, max_length=255, validators=[CustomLengthValidator(min_length=1, max_length=256, field_name= 'max_pay')]) 
     notice_period = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=1000, field_name= 'notice_period')])
     blind_hire = models.BooleanField(default=False)    
-    
+    hiring_status = models.CharField(null=True, max_length=30)
+    rejected_ids = models.JSONField(blank=True, null=True)  
+    Company = models.UUIDField(blank=True, null=True) #! LATER DOING AS FOREIGN KEY
+     
     def __str__(self):
-        return self.job_title + ' ' + str(self.id) + ' ' + str(self.creator)
+        return self.title + ' ' + str(self.id) + ' ' + str(self.creator)
+
+
+  
+# ! location as array[building separate models because we are taking them in a list of input  soo..]
+# ? [When ever we create an model for string the array elements , 
+# ? the validation wont happen for every element , 
+# ? for we need to create explicitly a Create() function to validate it, similarly for Update() and Delete() as well "@ serializer.py"]
+# * and we use a variable[ex:job_post] to build the relationship between the elements and the Job_Post model 
+
+class JobPostLocation(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    location = models.CharField(null=True, max_length=255)
+    city = models.CharField(null=True, max_length=255)
+    state = models.CharField(null=True, max_length=255)
+    country = models.BooleanField(null=True)
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name='job_post_locations')
     
-# ! location as array
-class Location(models.Model):
-    location = models.CharField(max_length=255)
-    remote_job = models.BooleanField()
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name= 'locations')
-    
+    class Meta:
+        db_table = "job_post_locations"
+        
     def __str__(self):
         return self.location
+
+
+class JobPostHardSkill(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    name = models.CharField(null=True, max_length=255, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name='name')])
+    deal_breaker = models.BooleanField(null=True,default=False)
+    expertise = models.IntegerField(null=True,validators=[CustomLengthValidator(min_value=1, max_value=10, field_name = 'expertise')])
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name = 'job_post_hard_skills')
     
-class HardSkill(models.Model):
-    hard_skill = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name='hards_kill')])
-    deal_breaker = models.BooleanField(default=False)
-    hard_skill_expertise = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=10, field_name = 'hard_skill_expertise')])
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name = 'hard_skills')
+    class Meta:
+        db_table = "job_post_hard_skills"
+        
+    def __str__(self):
+        return self.name
+    
+class JobPostSoftSkill(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    name = models.CharField(null=True,max_length = 255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'name')])
+    expertise  = models.IntegerField(null=True,validators=[CustomLengthValidator(min_value=1, max_value=10, field_name= 'expertise')])
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name = 'job_post_soft_skills')
+    
+    class Meta:
+        db_table = "job_post_soft_skills"
     
     def __str__(self):
-        return self.hard_skill
-    
-class SoftSkill(models.Model):
-    soft_skill = models.CharField(max_length = 255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'soft_skill')])
-    soft_skill_expertise  = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=10, field_name= 'soft_skill_expertise')])
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name = 'soft_skills')
-    
-    
-    def __str__(self):
-        return self.soft_skill
+        return self.name
     
 
-class Language(models.Model):
-    language = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'language')])
-    language_expertise = models.CharField(max_length=15 ,choices = SKILL_LEVEL_CHOICES )
-    deal_breaker = models.BooleanField(default = False)
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name='languages')
+class JobPostLanguage(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    name = models.CharField(null=True,max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'name')])
+    expertise = models.CharField(null=True,max_length=15 ,choices = SKILL_LEVEL_CHOICES )
+    deal_breaker = models.BooleanField(null=True,default = False)
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name='job_post_languages')
     
+    class Meta:
+        db_table = "job_post_languages"
+        
     def __str__(self):
-        return self.language
+        return self.name
     
 
-class IndustryExperience(models.Model):
-    industry = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'industry')])
-    minimum_industry_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'minimum_industry_experience')])
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name = 'industrys')
+class JobPostIndustryExperience(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    name = models.CharField(null=True,max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'name')])
+    min_experience = models.IntegerField(null=True,validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'min_experience')])
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name = 'job_post_industry_experiences')
     
+    class Meta:
+        db_table = "job_post_industry_experiences"
+        
     def __str__(self):
-        return self.industry
+        return self.name
     
-class CompanyExperience(models.Model):
-    company = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'company')])
-    minimum_company_experience = models.IntegerField(validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'minimum_company_experience')])
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name = 'companys')
+class JobPostCompanyExperience(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    name = models.CharField(null=True,max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'name')])
+    min_experience = models.IntegerField(null=True,validators=[CustomLengthValidator(min_value=1, max_value=49, field_name= 'min_experience')])
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name = 'job_post_company_experiences')
     
+    class Meta:
+        db_table = "job_post_company_experiences"
+        
     def __str__(self):
-        return self.company
+        return self.name
+
+class JobPostOverallExperience(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    min_experience = models.DateField(null=True)
+    max_experience = models.DateField(null=True)
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name = 'job_post_overall_experiences')
     
-class Benefits(models.Model):
-    benefit = models.CharField(max_length=255, choices= Extra_PAY_Choice, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name= 'benefit')],)
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name= 'benefits')
-    
+    class Meta:
+        db_table = "job_post_overall_experiences"
+        
     def __str__(self):
-        return self.benefit
+        return str(self.min_experience)
     
-class SupplementPay(models.Model):
-    supplement_pay = models.CharField(max_length=255, choices= Extra_PAY_Choice, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name= 'supplement_pay')], )
-    job_post = models.ForeignKey(Job_Post, on_delete=models.CASCADE, related_name= 'supplement_pays')
+class JobPostBenefits(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    name = models.CharField(null=True,max_length=255, choices= SUPPLEMENT_PAY_CHOICES, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name= 'name')])
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name= 'job_post_benefits')
     
+    class Meta:
+        db_table = "job_post_benefits"
+        
     def __str__(self):
-        return self.supplement_pay
+        return self.name
+    
+class JobPostSupplementPay(models.Model):
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default = uuid.uuid4)
+    name = models.CharField(null=True,max_length=255, choices= SUPPLEMENT_PAY_CHOICES, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name= 'amount')] )
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name= 'job_post_supplement_pays')
+    
+    class Meta:
+        db_table = "job_post_supplement_pays"
+        
+    def __str__(self):
+        return self.name
+   
+
+
+                                                    #?###############ONBOARDING#####################
+     
+   
+class Onboarding(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, unique=True, default=uuid.uuid4)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    onboarding_company_name = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name = 'company_name')])
+    onboarding_industry = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=1, max_length=255, field_name = 'company_industry')])
+    onboarding_scale = models.CharField(max_length=255,choices = SCALE_OF_COMPANY,  validators=[CustomLengthValidator(min_length=1, max_length=255, field_name = 'company_scale')]) 
+    total_employees = models.IntegerField(validators=[CustomLengthValidator(min_value = 1, max_value = 500, field_name = 'total_employees')])
+    
+    onboarding_company_vision = models.TextField(max_length=255, validators=[CustomLengthValidator(min_length = 1, max_length =255, field_name ='company_vision')])
+    onboarding_company_values = models.TextField(max_length=255, validators=[CustomLengthValidator(min_length = 1, max_length =255, field_name ='company_values')])
+    onboarding_company_culture = models.TextField(max_length=255, validators=[CustomLengthValidator(min_length = 1, max_length =255, field_name ='company_culture')])
+
+    onboarding_linkedin = models.URLField(max_length = 128, unique=True, validators=[CustomLengthValidator(min_length = 1, max_length= 128, field_name = 'linkedin')])
+    onboarding_website = models.URLField(max_length = 128, validators=[CustomLengthValidator(min_length=1, max_length = 128, field_name = 'website')])
+    
+    onboarding_pan = models.CharField(max_length = 256, validators=[CustomLengthValidator(min_length = 1, max_length = 256, field_name = 'pan')])
+    onboarding_gst = models.CharField(max_length = 256, validators=[CustomLengthValidator(min_length = 1, max_length = 256, field_name = 'gst')])
     
     
+    onboarding_headquarter = models.CharField(max_length = 256, validators=[CustomLengthValidator(min_length=1, max_length=256, field_name = 'headquarter')])
+    onboarding_have_branches = models.BooleanField(default=False)
     
- 
+    # class Meta:
+    #     db_table = 'onboardings'
+        
+    def __str__(self):
+        return self.onboarding_company_name
+    
+
+class OnboardingBranches(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, unique=True, default=uuid.uuid4)
+    onboarding_branches = models.CharField(max_length=255, validators=[CustomLengthValidator(min_length=2, max_length=255, field_name= 'branch')])
+    onboarding = models.ForeignKey(Onboarding, on_delete=models.CASCADE,related_name = 'branches')
+        
+    def __str__(self):
+        return self.onboarding_branches  
+#################################################################################################
+    
+    

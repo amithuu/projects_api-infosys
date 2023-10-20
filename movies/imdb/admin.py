@@ -1,21 +1,24 @@
 from django.contrib import admin
 from .models import WatchList, StreamPlatform, Review
-from user_app.models import JobPost, Job_Post, HardSkill, SoftSkill, Location, Language, IndustryExperience, CompanyExperience, Benefits, SupplementPay
+from user_app.models import JobPost, JobPostLocation, JobPostHardSkill, JobPostSoftSkill, JobPostLanguage, JobPostIndustryExperience, JobPostCompanyExperience,JobPostOverallExperience, JobPostBenefits, JobPostSupplementPay, Onboarding, OnboardingBranches
+
 # Register your models here.
 
 # admin.site.register(WatchList)
 admin.site.register(StreamPlatform)
 admin.site.register(Review)
 admin.site.register(JobPost)
-admin.site.register(Job_Post)
-admin.site.register(Location)
-admin.site.register(HardSkill)
-admin.site.register(SoftSkill)
-admin.site.register(Language)
-admin.site.register(IndustryExperience)
-admin.site.register(CompanyExperience)
-admin.site.register(Benefits)
-admin.site.register(SupplementPay)
+admin.site.register(JobPostLocation)
+admin.site.register(JobPostHardSkill)
+admin.site.register(JobPostSoftSkill)
+admin.site.register(JobPostLanguage)
+admin.site.register(JobPostIndustryExperience)
+admin.site.register(JobPostCompanyExperience)
+admin.site.register(JobPostOverallExperience)
+admin.site.register(JobPostBenefits)
+admin.site.register(JobPostSupplementPay)
+admin.site.register(Onboarding)
+admin.site.register(OnboardingBranches)
 
 
 
